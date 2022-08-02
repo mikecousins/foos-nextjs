@@ -3,51 +3,39 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-}
-
-model Account {
-  id                String  @id
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id            String    @id
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id             String     @id
+  email          String     @unique
+  passivEmail    String
+  passivPassword String
+  passivToken    String
+  headrooms      Headroom[]
 }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
+model Headroom {
+  id       String    @id
+  year     Int
+  accounts Account[]
+  userId   String
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
-  @@unique([identifier, token])
+model Account {
+  id         String      @id
+  accountId  String
+  type       AccountType
+  amount     Float
+  headroomId String
+  headroom   Headroom    @relation(fields: [headroomId], references: [id], onDelete: Cascade)
+}
+
+enum AccountType {
+  RRSP
+  TFSA
+  RESP
+  MARGIN
 }
