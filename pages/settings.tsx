@@ -33,7 +33,7 @@ const Settings: NextPage<Props> = ({ user }) => {
     <>
       <div className="text-2xl font-bold">Settings</div>
       Email: {session?.user?.email}<br />
-      Database Email: {user?.email ?? 'Not found'}
+      Passiv Token: {user?.passivToken.substring(0, 4)}
     </>
   );
 };

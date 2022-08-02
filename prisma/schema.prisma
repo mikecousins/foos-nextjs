@@ -8,28 +8,26 @@ datasource db {
 }
 
 model User {
-  id             String     @id
-  email          String     @unique
-  passivEmail    String
-  passivPassword String
-  passivToken    String
-  headrooms      Headroom[]
+  id          Int        @id @default(autoincrement())
+  email       String     @unique
+  passivToken String
+  headrooms   Headroom[]
 }
 
 model Headroom {
-  id       String    @id
+  id       Int       @id @default(autoincrement())
   year     Int
   accounts Account[]
-  userId   String
+  userId   Int
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Account {
-  id         String      @id
+  id         Int         @id @default(autoincrement())
   accountId  String
   type       AccountType
   amount     Float
-  headroomId String
+  headroomId Int
   headroom   Headroom    @relation(fields: [headroomId], references: [id], onDelete: Cascade)
 }
 
