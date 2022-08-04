@@ -8,13 +8,13 @@ datasource db {
 }
 
 model User {
-  id          Int        @id @default(autoincrement())
-  email       String     @unique
+  id          Int    @id @default(autoincrement())
+  email       String @unique
   passivToken String
-  headrooms   Headroom[]
+  years       Year[]
 }
 
-model Headroom {
+model Year {
   id       Int       @id @default(autoincrement())
   year     Int
   accounts Account[]
@@ -23,12 +23,13 @@ model Headroom {
 }
 
 model Account {
-  id         Int         @id @default(autoincrement())
-  accountId  String
-  type       AccountType
-  amount     Float
-  headroomId Int
-  headroom   Headroom    @relation(fields: [headroomId], references: [id], onDelete: Cascade)
+  id            Int         @id @default(autoincrement())
+  accountId     String
+  type          AccountType
+  headroom      Float
+  contributions Float
+  yearId        Int
+  year          Year        @relation(fields: [yearId], references: [id], onDelete: Cascade)
 }
 
 enum AccountType {
